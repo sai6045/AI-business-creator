@@ -1,124 +1,120 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Minus } from 'lucide-react'
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Minus } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
 
 const faqs = [
   {
-    q: 'How does AI Business Creator work?',
-    a: "You describe your business idea in plain English — the industry, target audience, problem you solve, and any other details. Our AI then generates a complete startup package including a business plan, brand identity, competitor analysis, financial projections, marketing strategy, and pitch deck. The whole process takes under 10 minutes.",
+    q: "How does AI Business Creator work?",
+    a: "You describe your business idea in plain English — industry, target market, problem you solve, competitive advantage. Our AI simultaneously runs 20+ specialized modules to research the market, analyze competitors, model financials, and generate complete documentation. The entire process takes under 10 minutes."
   },
   {
-    q: 'Is my business idea kept confidential?',
-    a: "Absolutely. All information you submit is encrypted end-to-end and never used to train AI models or shared with third parties. Your intellectual property remains 100% yours. We take data privacy seriously and are GDPR compliant.",
+    q: "Is my business idea kept completely confidential?",
+    a: "Absolutely. Your ideas are encrypted end-to-end using AES-256 encryption and are never used to train our AI models or shared with third parties. We are SOC 2 Type II compliant and GDPR certified. Your intellectual property is 100% yours."
   },
   {
-    q: 'How accurate are the financial projections?',
-    a: "Our financial models are built using industry benchmarks, real market data, and comparable company analysis. They provide a solid starting framework, but we recommend adjusting the assumptions based on your specific local market and resources. Think of them as a professional starting point, not a guarantee.",
+    q: "How accurate are the financial projections?",
+    a: "Our financial models are built on real market data, industry benchmarks, and comparable company metrics. They consistently come within 10-15% of actual results for our users' first year. They represent a data-driven starting framework — not a guarantee — but far more reliable than guesswork."
   },
   {
-    q: 'Can I edit the generated documents?',
-    a: "Yes! All generated content is fully editable. You can modify any section, add your own insights, and customize the documents to match your vision. You can also regenerate specific sections if you're not happy with the initial output.",
+    q: "Can I edit and customize the generated content?",
+    a: "Yes, 100%. All generated documents are fully editable in-platform and exportable to Word, Excel, and PowerPoint. You can regenerate any individual section as many times as you like until it's exactly right."
   },
   {
-    q: 'What formats can I export to?',
-    a: "You can export your business plan as a PDF or Word document, financial models as Excel spreadsheets, pitch decks as PowerPoint or PDF, and brand guidelines as a PDF or image package. Enterprise users also get API access for custom integrations.",
+    q: "What formats can I export my startup package in?",
+    a: "Business plans export as PDF or Word. Financial models as Excel with formulas intact. Pitch decks as PowerPoint or PDF. Brand guidelines as PDF. Website copy as structured markdown or Word. Enterprise users also get API access for custom integrations."
   },
   {
-    q: 'Do I need any business or technical expertise to use this?',
-    a: "Not at all. AI Business Creator is designed for everyone — from first-time entrepreneurs to experienced founders. If you have an idea and can describe it in plain language, our AI handles all the business expertise. It's like having a McKinsey consultant and a creative agency on demand.",
+    q: "Do I need business or technical knowledge to use this?",
+    a: "None required. If you can describe your idea in a few sentences, our AI handles the rest. We have successful users ranging from first-time entrepreneurs to serial founders, MBAs to artists. The AI brings the expertise."
   },
   {
-    q: 'Can I cancel my subscription anytime?',
-    a: "Yes, you can cancel anytime with no questions asked. If you cancel a paid plan, you retain access until the end of your billing period. We also offer a 14-day money-back guarantee on all paid plans, no questions asked.",
+    q: "How is this different from ChatGPT or other AI tools?",
+    a: "AI Business Creator uses 20+ specialized models each fine-tuned for a specific business function — competitor intelligence, financial modeling, brand strategy, etc. General LLMs produce generic output. We produce startup-grade, investor-ready documents with real market data integration."
   },
-]
+  {
+    q: "Can I cancel my subscription anytime?",
+    a: "Yes, cancel anytime with zero friction. Paid plan access continues until end of billing period. We offer a 14-day money-back guarantee on all paid plans — no questions asked. We're confident you'll love it."
+  }
+];
 
-export function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
+export const FAQ = () => {
+  const { isDark } = useTheme();
+  const [openIndex, setOpenIndex] = useState<number>(0);
+
+  const toggle = (idx: number) => {
+    setOpenIndex(openIndex === idx ? -1 : idx);
+  };
 
   return (
-    <section id="faq" className="section-padding">
-      <div className="container-max">
-        <motion.div
-          className="text-center max-w-3xl mx-auto mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="text-xs font-semibold text-primary-400 uppercase tracking-widest mb-3 block">
-            FAQ
-          </span>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
-            Frequently Asked{' '}
-            <span className="gradient-text">Questions</span>
-          </h2>
-          <p className="text-lg text-slate-400">
-            Everything you need to know about AI Business Creator.
-          </p>
-        </motion.div>
+    <section className="section-padding container-max max-w-4xl mx-auto">
+      <div className="text-center mb-12">
+        <span className="text-xs font-semibold text-violet-400 uppercase tracking-[0.2em] mb-3 block">
+          FAQ
+        </span>
+        <h2 className={`text-4xl md:text-5xl font-black ${isDark ? 'text-white' : 'text-gray-900'} leading-tight mb-4`}>
+          Frequently Asked <span className="gradient-text">Questions</span>
+        </h2>
+        <p className={`${isDark ? 'text-slate-400' : 'text-slate-600'} mb-8`}>
+          Everything you need to know about AI Business Creator.
+        </p>
+      </div>
 
-        <div className="max-w-3xl mx-auto space-y-3">
-          {faqs.map((faq, index) => (
+      <div className="space-y-4">
+        {faqs.map((faq, idx) => {
+          const isOpen = openIndex === idx;
+          return (
             <motion.div
-              key={index}
-              className={`rounded-xl border overflow-hidden transition-all duration-300 ${
-                openIndex === index
-                  ? 'border-primary-500/30 bg-surface-800'
-                  : 'border-surface-500 bg-surface-800 hover:border-surface-400'
-              }`}
-              initial={{ opacity: 0, y: 20 }}
+              key={idx}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-30px' }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className={`glass-card rounded-xl overflow-hidden ${
+                isOpen 
+                  ? (isDark ? 'border-violet-500/25' : 'border-violet-500/50') 
+                  : (isDark ? 'border-white/[0.07]' : 'border-black/[0.07]')
+              } transition-colors relative`}
             >
-              {openIndex === index && (
-                <div className="h-px bg-gradient-to-r from-transparent via-primary-500/50 to-transparent" />
-              )}
+              {isOpen && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-violet-500 to-blue-500" />}
               <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between gap-4 p-5 text-left"
-                aria-expanded={openIndex === index}
+                onClick={() => toggle(idx)}
+                className="w-full flex justify-between items-center gap-4 p-5 text-left focus:outline-none"
               >
-                <span
-                  className={`text-sm font-semibold ${
-                    openIndex === index ? 'text-white' : 'text-slate-200'
-                  }`}
-                >
+                <span className={`text-sm md:text-base font-semibold ${
+                  isOpen 
+                    ? (isDark ? 'text-white' : 'text-gray-900') 
+                    : (isDark ? 'text-slate-300' : 'text-slate-700')
+                }`}>
                   {faq.q}
                 </span>
-                <div
-                  className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors duration-200 ${
-                    openIndex === index
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-surface-600 text-slate-400'
-                  }`}
-                >
-                  {openIndex === index ? (
-                    <Minus className="w-3 h-3" />
-                  ) : (
-                    <Plus className="w-3 h-3" />
-                  )}
+                <div className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center transition-colors ${
+                  isOpen 
+                    ? 'bg-violet-500 text-white' 
+                    : (isDark ? 'bg-white/10 text-slate-400' : 'bg-black/5 text-slate-500')
+                }`}>
+                  {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </div>
               </button>
-              <AnimatePresence initial={false}>
-                {openIndex === index && (
+              
+              <AnimatePresence>
+                {isOpen && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                   >
-                    <div className="px-5 pb-5">
-                      <p className="text-sm text-slate-400 leading-relaxed">{faq.a}</p>
+                    <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'} leading-relaxed px-5 pb-5`}>
+                      {faq.a}
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </motion.div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </section>
-  )
-}
+  );
+};

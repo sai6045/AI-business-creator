@@ -1,184 +1,194 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Play, Sparkles, TrendingUp, Star, Users } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
-
-const stats = [
-  { icon: Users, value: '10,000+', label: 'Businesses Created' },
-  { icon: TrendingUp, value: '98%', label: 'Success Rate' },
-  { icon: Star, value: '4.9/5', label: 'Average Rating' },
-]
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (delay: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] },
-  }),
-}
+import { Sparkles, ArrowRight, Play, CheckCircle2, TrendingUp, Palette } from 'lucide-react'
+import { useTheme } from '@/context/ThemeContext'
+import { cn } from '@/lib/utils'
 
 export function Hero() {
+  const { isDark } = useTheme()
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+  }
+
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 pb-16">
-      {/* Background */}
-      <div className="absolute inset-0 mesh-bg" />
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl" />
-      <div className="absolute top-1/3 -right-32 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary-500/30 to-transparent" />
+    <section className={cn('relative min-h-screen flex items-center pt-20 pb-16 overflow-hidden', isDark ? 'bg-[#07070f]' : 'bg-white')}>
+      {/* Background Effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-violet-600/20 blur-[120px] mix-blend-screen" />
+        <div className="absolute top-[20%] right-[10%] w-[500px] h-[500px] rounded-full bg-blue-600/20 blur-[100px] mix-blend-screen" />
+        <div className="hero-glow" />
+        <div className={cn('absolute inset-0', isDark ? 'mesh-bg' : 'bg-grid-pattern opacity-[0.03]')} />
+      </div>
 
-      <div className="container-max px-6 flex flex-col items-center text-center relative z-10">
-        {/* Badge */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          custom={0}
-          variants={fadeUp}
-        >
-          <Badge variant="primary" dot className="mb-8 px-4 py-2 text-sm">
-            <Sparkles className="w-3.5 h-3.5" />
-            AI-Powered Business Creation Platform
-          </Badge>
-        </motion.div>
+      <div className="container-max section-padding mx-auto relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center">
+          
+          {/* Left Column: Text Content */}
+          <motion.div 
+            variants={staggerContainer}
+            initial="hidden"
+            animate="show"
+            className="flex flex-col items-start max-w-2xl"
+          >
+            <motion.div variants={fadeUp} className={cn('inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-8 badge-pill', isDark ? 'border-white/10 bg-white/5' : 'border-violet-200 bg-violet-50 text-violet-700')}>
+              <Sparkles className={cn('w-4 h-4', isDark ? 'text-violet-400' : 'text-violet-600')} />
+              <span className={cn('text-xs font-semibold uppercase tracking-wider', isDark ? 'text-slate-300' : 'text-violet-700')}>10,000+ startups launched globally</span>
+            </motion.div>
 
-        {/* Headline */}
-        <motion.h1
-          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] mb-6 text-white"
-          initial="hidden"
-          animate="visible"
-          custom={0.15}
-          variants={fadeUp}
-        >
-          Launch Your Dream
-          <br />
-          Business{' '}
-          <span className="gradient-text">With AI</span>
-        </motion.h1>
+            <motion.h1 variants={fadeUp} className={cn('text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[1.03] tracking-tight mb-6', isDark ? 'text-white' : 'text-gray-900')}>
+              Build Your Startup <br />
+              with <span className="gradient-text">Artificial Intelligence</span>
+            </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p
-          className="text-lg md:text-xl text-slate-400 max-w-2xl leading-relaxed mb-10"
-          initial="hidden"
-          animate="visible"
-          custom={0.3}
-          variants={fadeUp}
-        >
-          Transform any idea into a complete startup — business plans, brand identity, competitor
-          analysis, financial forecasts, marketing strategies, and pitch decks. All in minutes.
-        </motion.p>
+            <motion.p variants={fadeUp} className={cn('text-lg md:text-xl max-w-xl leading-relaxed mb-10', isDark ? 'text-slate-400' : 'text-gray-600')}>
+              Turn one simple business idea into a complete startup — including branding, business plans, financial forecasts, competitor analysis, marketing strategy, website content, and investor pitch decks.
+            </motion.p>
 
-        {/* CTAs */}
-        <motion.div
-          className="flex flex-col sm:flex-row gap-4 mb-16"
-          initial="hidden"
-          animate="visible"
-          custom={0.45}
-          variants={fadeUp}
-        >
-          <Link to="/dashboard">
-            <Button variant="primary" size="lg" className="group">
-              Start Building Free
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </Link>
-          <Button variant="secondary" size="lg" className="gap-3">
-            <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-              <Play className="w-3 h-3 text-white fill-white" />
-            </span>
-            Watch Demo
-          </Button>
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          className="flex flex-wrap justify-center gap-8 mb-20"
-          initial="hidden"
-          animate="visible"
-          custom={0.6}
-          variants={fadeUp}
-        >
-          {stats.map(({ icon: Icon, value, label }) => (
-            <div key={label} className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-primary-500/10 border border-primary-500/20 flex items-center justify-center">
-                <Icon className="w-4 h-4 text-primary-400" />
-              </div>
-              <div className="text-left">
-                <div className="text-base font-bold text-white">{value}</div>
-                <div className="text-xs text-slate-500">{label}</div>
-              </div>
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Dashboard Mockup */}
-        <motion.div
-          className="w-full max-w-5xl relative"
-          initial={{ opacity: 0, y: 60, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-        >
-          {/* Glow behind mockup */}
-          <div className="absolute inset-x-0 -bottom-20 h-40 bg-primary-600/20 blur-3xl" />
-
-          {/* Browser Chrome */}
-          <div className="relative rounded-2xl border border-white/10 bg-surface-800 shadow-2xl shadow-black/50 overflow-hidden">
-            {/* Browser bar */}
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-surface-900">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                <div className="w-3 h-3 rounded-full bg-green-500/60" />
-              </div>
-              <div className="flex-1 mx-4 px-3 py-1 rounded-md bg-surface-700 border border-white/5 text-xs text-slate-500">
-                app.aibusinesscreator.com/dashboard
-              </div>
-            </div>
-
-            {/* Dashboard Content */}
-            <div className="p-6 bg-surface-800">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <div className="h-6 w-48 bg-gradient-to-r from-primary-600/40 to-accent-500/40 rounded-lg mb-2" />
-                  <div className="h-3 w-32 bg-surface-600 rounded" />
+            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-4 mb-16">
+              <button className="btn-gradient px-7 py-3.5 rounded-xl text-base font-semibold text-white shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all flex items-center gap-2 group">
+                Start Free
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button className={cn('px-7 py-3.5 rounded-xl text-base font-medium border flex items-center gap-3 transition-colors', isDark ? 'border-white/10 text-slate-300 hover:bg-white/5' : 'border-gray-200 text-gray-700 hover:bg-gray-50')}>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-600 to-blue-600 flex items-center justify-center shadow-md">
+                  <Play className="w-4 h-4 text-white fill-white ml-0.5" />
                 </div>
-                <div className="flex gap-2">
-                  <div className="h-8 w-24 bg-primary-600/30 rounded-lg border border-primary-500/20" />
-                  <div className="h-8 w-8 bg-surface-600 rounded-lg" />
+                Watch Demo
+              </button>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="flex flex-col gap-4">
+              <p className={cn('text-sm font-medium', isDark ? 'text-slate-500' : 'text-gray-500')}>Trusted by teams at</p>
+              <div className="flex items-center gap-6 opacity-60 grayscale">
+                <span className={cn('text-xl font-bold', isDark ? 'text-white' : 'text-gray-900')}>Stripe</span>
+                <span className={cn('text-xl font-bold', isDark ? 'text-white' : 'text-gray-900')}>Google</span>
+                <span className={cn('text-xl font-bold', isDark ? 'text-white' : 'text-gray-900')}>Microsoft</span>
+                <span className={cn('text-xl font-bold', isDark ? 'text-white' : 'text-gray-900')}>YCombinator</span>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right Column: Animated Illustration */}
+          <div className="relative w-full h-[600px] flex items-center justify-center lg:justify-end perspective-1000">
+            {/* Main Dashboard Card */}
+            <motion.div 
+              initial={{ opacity: 0, rotateY: -10, rotateX: 5, z: -100 }}
+              animate={{ opacity: 1, rotateY: 0, rotateX: 0, z: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className={cn(
+                'relative w-[110%] sm:w-full max-w-lg rounded-2xl glass-card p-5 border shadow-2xl z-10',
+                isDark ? 'bg-[#0e0e1a]/80 border-white/[0.07] shadow-violet-900/20' : 'bg-white/90 border-gray-200 shadow-xl'
+              )}
+              style={{
+                transformStyle: "preserve-3d"
+              }}
+            >
+              {/* Browser Chrome */}
+              <div className={cn('flex items-center gap-2 mb-6 pb-4 border-b', isDark ? 'border-white/[0.07]' : 'border-gray-100')}>
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-400" />
+                  <div className="w-3 h-3 rounded-full bg-amber-400" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-400" />
+                </div>
+                <div className={cn('mx-auto w-1/2 h-5 rounded-md', isDark ? 'bg-white/[0.03]' : 'bg-gray-100')} />
+              </div>
+
+              {/* Dashboard Content */}
+              <div className="space-y-6">
+                <div className={cn('w-1/3 h-6 rounded-lg bg-gradient-to-r', isDark ? 'from-white/10 to-white/5' : 'from-gray-200 to-gray-100')} />
+                
+                <div className="grid grid-cols-3 gap-4">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className={cn('p-3 rounded-xl border', isDark ? 'bg-white/[0.02] border-white/[0.05]' : 'bg-gray-50 border-gray-100')}>
+                      <div className={cn('w-8 h-8 rounded-full mb-3', i===1 ? 'bg-violet-500/20' : i===2 ? 'bg-blue-500/20' : 'bg-emerald-500/20')} />
+                      <div className={cn('w-full h-4 rounded mb-2', isDark ? 'bg-white/10' : 'bg-gray-200')} />
+                      <div className={cn('w-2/3 h-3 rounded', isDark ? 'bg-white/5' : 'bg-gray-100')} />
+                    </div>
+                  ))}
+                </div>
+
+                <div className={cn('h-40 rounded-xl border p-4 flex items-end gap-2', isDark ? 'bg-white/[0.02] border-white/[0.05]' : 'bg-gray-50 border-gray-100')}>
+                  {[40, 70, 45, 90, 65, 85, 100, 75, 55, 80, 60, 95].map((h, i) => (
+                    <motion.div 
+                      key={i}
+                      initial={{ height: 0 }}
+                      animate={{ height: `${h}%` }}
+                      transition={{ delay: 0.5 + (i * 0.05), duration: 0.8, type: "spring" }}
+                      className="flex-1 rounded-t-sm bg-gradient-to-t from-violet-600 to-blue-500 opacity-80"
+                    />
+                  ))}
                 </div>
               </div>
-              {/* Metric Cards */}
-              <div className="grid grid-cols-4 gap-3 mb-6">
-                {['Business Plans', 'Brand Assets', 'Competitors', 'Financials'].map((label, i) => (
-                  <div key={label} className="p-3 rounded-xl bg-surface-700 border border-white/5">
-                    <div className={`h-6 w-6 rounded-lg mb-2 ${['bg-primary-500/30', 'bg-accent-500/30', 'bg-emerald-500/30', 'bg-amber-500/30'][i]}`} />
-                    <div className="h-5 w-12 bg-white/20 rounded mb-1" />
-                    <div className="text-xs text-slate-500">{label}</div>
-                  </div>
-                ))}
-              </div>
-              {/* Chart Area */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="col-span-2 h-32 rounded-xl bg-surface-700 border border-white/5 p-3">
-                  <div className="flex items-end gap-1 h-full pb-2">
-                    {[40, 65, 55, 80, 70, 90, 75, 95].map((h, i) => (
-                      <div
-                        key={i}
-                        className="flex-1 rounded-t bg-gradient-to-t from-primary-600/60 to-primary-400/40"
-                        style={{ height: `${h}%` }}
-                      />
-                    ))}
-                  </div>
+            </motion.div>
+
+            {/* Floating Card 1 */}
+            <motion.div
+              animate={{ y: [-10, 10, -10] }}
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+              className={cn(
+                'absolute -right-4 md:-right-12 top-10 w-48 p-4 rounded-2xl border shadow-xl z-20 backdrop-blur-md',
+                isDark ? 'bg-[#131328]/90 border-white/10' : 'bg-white/95 border-gray-200'
+              )}
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                 </div>
-                <div className="h-32 rounded-xl bg-surface-700 border border-white/5 p-3 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full border-4 border-primary-500/40 border-t-primary-500 flex items-center justify-center">
-                    <span className="text-xs font-bold text-primary-400">87%</span>
-                  </div>
-                </div>
+                <div className={cn('text-sm font-semibold', isDark ? 'text-white' : 'text-gray-900')}>Business Plan</div>
               </div>
-            </div>
+              <div className="text-xs text-emerald-500 font-medium">Generated ✓</div>
+            </motion.div>
+
+            {/* Floating Card 2 */}
+            <motion.div
+              animate={{ y: [10, -10, 10] }}
+              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+              className={cn(
+                'absolute -left-4 md:-left-16 bottom-20 w-52 p-4 rounded-2xl border shadow-xl z-20 backdrop-blur-md',
+                isDark ? 'bg-[#131328]/90 border-white/10' : 'bg-white/95 border-gray-200'
+              )}
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 rounded-full bg-violet-500/20 flex items-center justify-center">
+                  <Palette className="w-4 h-4 text-violet-500" />
+                </div>
+                <div className={cn('text-sm font-semibold', isDark ? 'text-white' : 'text-gray-900')}>Brand Identity</div>
+              </div>
+              <div className={cn('text-xs', isDark ? 'text-slate-400' : 'text-gray-500')}>5 assets ready</div>
+            </motion.div>
+
+            {/* Floating Card 3 */}
+            <motion.div
+              animate={{ y: [-5, 5, -5] }}
+              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut", delay: 2 }}
+              className={cn(
+                'absolute -right-8 md:-right-20 top-1/2 -translate-y-1/2 w-48 p-4 rounded-2xl border shadow-xl z-20 backdrop-blur-md',
+                isDark ? 'bg-[#131328]/90 border-white/10' : 'bg-white/95 border-gray-200'
+              )}
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 text-blue-500" />
+                </div>
+                <div className={cn('text-xs font-semibold uppercase', isDark ? 'text-slate-400' : 'text-gray-500')}>Revenue Forecast</div>
+              </div>
+              <div className="text-2xl font-bold gradient-text mb-1">$2.4M</div>
+              <div className={cn('text-xs', isDark ? 'text-slate-500' : 'text-gray-400')}>Year 1 projection</div>
+            </motion.div>
+
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
